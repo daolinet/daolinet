@@ -1,7 +1,7 @@
 daoliet使用手册
 =========
 
-在开始使用之前，请确保系统已经完成[daolinet安装](daolinet安装文档.md)过程，同时确保各个服务都正常启动。daolinet提供了一套命令行工具daolictl，并结合docker命令共同完成对docker网络的管理。
+在开始使用之前，请确保系统已经完成[daolinet安装](InstallGuide.md)过程，同时确保各个服务都正常启动。daolinet提供了一套命令行工具daolictl，并结合docker命令共同完成对docker网络的管理。
 
 #### daolictl命令说明
 
