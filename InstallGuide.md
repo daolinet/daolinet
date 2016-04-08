@@ -178,7 +178,7 @@ OpenVswitch安装请执行以下命令，详细安装请参考[How to Install Op
 
 如果agent节点与manager节点操作系统环境一样，此步可以直接拷贝**安装manager节点**时编译完成的daolinet二进制文件；如果系统环境不一样，此步>直接按照**安装manager节点 \* 编译安装daolinet api server**完成编译，再执行以下命令启动agent服务：
 
-    docker agent --iface <DEVNAME:DEVIP> etcd://<ETCD-IP>:4001
+    daolinet agent --iface <DEVNAME:DEVIP> etcd://<ETCD-IP>:4001
 
 #### 6. 连接控制器
 
