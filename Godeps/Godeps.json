@@ -1,0 +1,92 @@
+{
+	"ImportPath": "github.com/daolicloud/daolinet",
+	"GoVersion": "go1.5",
+	"Deps": [
+		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.9.0-15-g219c8cb",
+			"Rev": "219c8cb75c258c552e999735be6df753ffc7afdc"
+		},
+		{
+			"ImportPath": "github.com/codegangsta/cli",
+			"Comment": "1.2.0-237-g71f57d3",
+			"Rev": "71f57d300dd6a780ac1856c005c4b518cfd498ec"
+		},
+		{
+			"ImportPath": "github.com/coreos/etcd/client",
+			"Comment": "v2.3.0-249-g34375ef",
+			"Rev": "34375ef851c54ea63b03d7d7db9f5e27e9a62808"
+		},
+		{
+			"ImportPath": "github.com/coreos/etcd/pkg/pathutil",
+			"Comment": "v2.3.0-249-g34375ef",
+			"Rev": "34375ef851c54ea63b03d7d7db9f5e27e9a62808"
+		},
+		{
+			"ImportPath": "github.com/coreos/etcd/pkg/types",
+			"Comment": "v2.3.0-249-g34375ef",
+			"Rev": "34375ef851c54ea63b03d7d7db9f5e27e9a62808"
+		},
+		{
+			"ImportPath": "github.com/docker/go-units",
+			"Comment": "v0.3.0",
+			"Rev": "5d2041e26a699eaca682e2ea41c8f891e1060444"
+		},
+		{
+			"ImportPath": "github.com/docker/libkv",
+			"Comment": "v0.1.0-29-g2358b13",
+			"Rev": "2358b13f99488ec99e127fc4ef5f905533b5e2a0"
+		},
+		{
+			"ImportPath": "github.com/gorilla/context",
+			"Rev": "1ea25387ff6f684839d82767c1733ff4d4d15d0a"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Comment": "v1.1",
+			"Rev": "0eeaf8392f5b04950925b8a69fe70f110fa7cbfc"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/consul/api",
+			"Comment": "v0.6.4-195-g711d7a0",
+			"Rev": "711d7a0ad41df91412fd61cac5336b64aeea4e88"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/go-cleanhttp",
+			"Rev": "875fb671b3ddc66f8e2f0acc33829c8cb989a38d"
+		},
+		{
+			"ImportPath": "github.com/hashicorp/serf/coordinate",
+			"Comment": "v0.7.0-51-g6a2ce77",
+			"Rev": "6a2ce775e767c6fe7e2beb4df2b895ebd7456b25"
+		},
+		{
+			"ImportPath": "github.com/mailgun/oxy/forward",
+			"Rev": "8aaf36279137ac04ace3792a4f86098631b27d5a"
+		},
+		{
+			"ImportPath": "github.com/samalba/dockerclient",
+			"Rev": "52fe1c9d696f36d894d2319f1717a383ebc46f19"
+		},
+		{
+			"ImportPath": "github.com/samuel/go-zookeeper/zk",
+			"Rev": "218e9c81c0dd8b3b18172b2bbfad92cc7d6db55f"
+		},
+		{
+			"ImportPath": "github.com/ugorji/go/codec",
+			"Rev": "a396ed22fc049df733440d90efe17475e3929ccb"
+		},
+		{
+			"ImportPath": "github.com/vulcand/oxy/utils",
+			"Rev": "8aaf36279137ac04ace3792a4f86098631b27d5a"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "62685c2d7ca23c807425dca88b11a3e2323dab41"
+		},
+		{
+			"ImportPath": "golang.org/x/sys/unix",
+			"Rev": "042a8f53ce82bbe081222da955159491e32146a0"
+		}
+	]
+}
