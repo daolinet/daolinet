@@ -8,8 +8,8 @@ Environment Preparation
 
 DaoliNet depends on the following software environment:
 
-* Docker Version 1.9 or later
-* Golang Version 1.5 or later
+* Docker version 1.9 or later
+* Golang version 1.5 or later
 * Git
 * Python 2.7
 
@@ -51,37 +51,37 @@ Execute the following command line
 DaoliNet Installation
 -----------
 
-DaoliNet should be installed on a cluster of server nodes consisting of at least one manager node and one agent node. The installation work must be repeated on each server node in the cluster.
+DaoliNet installation work involves that for manager nodes and that for agent nodes. Repeat manager node installation on each of the server nodes which are selected as manager nodes, and repeat agent node installation on each of the server nodes which are selected as agent nodes. A server node may be used for both a mamager node and an agent node.
 
 ### Manager Node Installation
 
 The installation of a manager node involves the following six steps:
 
-1. etcd (key-value store/service discovery)
-2. swarm manager (docker cluster manager service)
-3. ryu (openflow framework)
-4. daolinet (DaoliNet api service)
-5. daolictl (DaoliNet command line tool)
-6. daolicontroller (openflow controller)
+1. Install Etcd
+2. Install Swarm Manager
+3. Install Ryu (OpenFlow Framework)
+4. Install DaoliNet (DaoliNet api service)
+5. Install Daolictl (DaoliNet command line tool)
+6. Install Daolicontroller (OpenFlow controller)
 
 Each step above is detailed below.
 
-#### 1. Etcd
+#### 1. Install Etcd
 
 	docker pull microbox/etcd
 	docker run -ti -d -p 4001:4001 -p 7001:7001 --restart=always --name discovery microbox/etcd -addr <SWARM-IP>:4001 -peer-addr <SWARM-IP>:7001
 
-#### 2. Swarm manager
+#### 2. Install Swarm Manager
 
 	docker pull swarm
 	docker run -ti -d -p 3376:3376 --restart=always --name swarm-manager --link discovery:discovery swarm m --addr <SWARM-MANAGER-IP>:3376 --host tcp://0.0.0.0:3376 etcd://discovery:4001
 
-#### 3. Ryu
+#### 3. Install Ryu
 
 	# Install openflow framework
 	pip install ryu
 
-#### 4. DaoliNet api service
+#### 4. Install DaoliNet API Service
 
 	mkdir $HOME/daolinet
 	cd $HOME/daolinet
@@ -98,7 +98,7 @@ Each step above is detailed below.
 	# Run api server
 	daolinet server --swarm tcp://<SWARM-MANAGER-IP>:3376 etcd://<ETCD-IP>:4001
 
-#### 5. daolictl command line tool
+#### 5. Install Daolictl Command Line Tool
 
 > ***Note:*** Sometimes, you may need to repeat all command lines in Step 3 before carry on this step
 
@@ -108,7 +108,7 @@ Each step above is detailed below.
 	godep go build
 	mv daolictl ../../../../bin/
 
-#### 6. Openflow controller
+#### 6. Install Openflow Controller
 
 	# Install depend packages
 	yum install -y python-requests python-docker-py
@@ -120,7 +120,7 @@ Each step above is detailed below.
 
 ### Agent Node Installation
 
-The agent node needs to do the following steps:
+The installation of an agent node involves the following six steps:
 
 1. Configure Docker Startup Parameters
 2. Install Wwarm Agent
@@ -204,7 +204,5 @@ In agent node, complete the above steps, and finally configure ovs connect to da
 
 	ovs-vsctl set-controller daolinet tcp:<CONTROLLER-IP1>:6633,tcp:<CONTROLLER-IP2>:6633
 
-## Summary
-
-Above are DaoliNet installation steps. For how to use DaoliNetto manage docker containers, refer to [User Guide](UserGuide-en.md).
+## We are done for DaoliNet installation! Try it now! (see [DaoliNet User Guide](UserGuide-en.md))
 
