@@ -39,7 +39,7 @@ Execute the following command line
 
 		yum install -y python-devel python-pip
 
-> ***Note: ***
+> Note:
 >
 > 1. Each export command in this guide can be configured into a Linux profile file to make it permanent
 >
