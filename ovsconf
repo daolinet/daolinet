@@ -1,0 +1,37 @@
+#!/bin/bash
+
+: ${DEVNAME:=$1}
+
+if [ -z "$DEVNAME" ]; then
+    DEVNAME=$(ip route | awk '$1=="default" {print $5}' | head -1)
+    if [ -z "$DEVNAME" ]; then
+        echo "Default route could not be found." && exit -1
+    fi
+    GATEWAYIP=$(ip route | awk '$1=="default" {print $3}')
+else
+    if [ -n "$(ip route | grep default | grep $DEVNAME)" ]; then
+        GATEWAYIP=$(ip route | awk '$1=="default" {print $3}')
+    fi
+fi
+
+if [ "$DEVNAME" = "daolinet" ]; then
+    echo "You already setup daolinet." && exit -1
+fi
+
+ip link show $DEVNAME 1> /dev/null
+[ "$?" -eq 0 ] || exit -1
+
+DEVMAC=$(ip link show $DEVNAME | grep 'link/ether' | awk '{print $2}')
+DEVIP=$(ip addr show $DEVNAME | awk '$1=="inet" {print $2}'| head -1)
+
+systemctl stop NetworkManager
+systemctl disable NetworkManager
+ovs-vsctl add-br daolinet
+ovs-vsctl add-port daolinet $DEVNAME
+ip addr del $DEVIP dev $DEVNAME
+ip addr change $DEVIP dev $DEVNAME
+ovs-vsctl set Bridge daolinet other_config:hwaddr="$DEVMAC"
+
+if [ -n "$GATEWAYIP" ]; then
+    ip route add default via $GATEWAYIP
+fi
