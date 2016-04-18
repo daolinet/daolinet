@@ -3,7 +3,7 @@ DaoliNet Installation Guide
 
 This document provides the installation steps for DaoliNet over the latest Linux distributions of CentOS7 or Fedora. For Ubuntu or Debian distributios, replace all 'yum' in this guide with 'apt-get'.
 
-Environment Preparation
+1. Environment Preparation
 ----------
 
 DaoliNet depends on the following software environment:
@@ -48,40 +48,40 @@ Execute the following command line
 >			iptables -I INPUT -s <SUBNET>/<PREFIX> -j ACCEPT
 
 
-DaoliNet Installation
+2. DaoliNet Installation
 -----------
 
 DaoliNet installation work involves that for manager nodes and that for agent nodes. Repeat manager node installation on each of the server nodes which are selected as manager nodes, and repeat agent node installation on each of the server nodes which are selected as agent nodes. A server node may be used for both a mamager node and an agent node.
 
-### Manager Node Installation
+### 2.1 Manager Node Installation
 
 The installation of a manager node involves the following six steps:
 
-1. Install Etcd
-2. Install Swarm Manager
-3. Install Ryu (OpenFlow Framework)
-4. Install DaoliNet (DaoliNet api service)
-5. Install Daolictl (DaoliNet command line tool)
-6. Install Daolicontroller (OpenFlow controller)
+* Install Etcd
+* Install Swarm Manager
+* Install Ryu (OpenFlow Framework)
+* Install DaoliNet (DaoliNet api service)
+* Install Daolictl (DaoliNet command line tool)
+* Install Daolicontroller (OpenFlow controller)
 
 Each step above is detailed below.
 
-#### 1. Install Etcd
+#### 2.1.1. Install Etcd
 
 	docker pull microbox/etcd
 	docker run -ti -d -p 4001:4001 -p 7001:7001 --restart=always --name discovery microbox/etcd -addr <SWARM-IP>:4001 -peer-addr <SWARM-IP>:7001
 
-#### 2. Install Swarm Manager
+#### 2.1.2. Install Swarm Manager
 
 	docker pull swarm
 	docker run -ti -d -p 3376:3376 --restart=always --name swarm-manager --link discovery:discovery swarm m --addr <SWARM-MANAGER-IP>:3376 --host tcp://0.0.0.0:3376 etcd://discovery:4001
 
-#### 3. Install Ryu
+#### 2.1.3. Install Ryu
 
 	# Install openflow framework
 	pip install ryu
 
-#### 4. Install DaoliNet API Service
+#### 2.1.4. Install DaoliNet API Service
 
 	mkdir $HOME/daolinet
 	cd $HOME/daolinet
@@ -98,7 +98,7 @@ Each step above is detailed below.
 	# Run api server
 	daolinet server --swarm tcp://<SWARM-MANAGER-IP>:3376 etcd://<ETCD-IP>:4001
 
-#### 5. Install Daolictl Command Line Tool
+#### 2.1.5. Install Daolictl Command Line Tool
 
 > ***Note:*** Sometimes, you may need to repeat all command lines in Step 3 before carry on this step
 
@@ -108,7 +108,7 @@ Each step above is detailed below.
 	godep go build
 	mv daolictl ../../../../bin/
 
-#### 6. Install Openflow Controller
+#### 2.1.6. Install Openflow Controller
 
 	# Install depend packages
 	yum install -y python-requests python-docker-py
@@ -118,20 +118,20 @@ Each step above is detailed below.
 	# Run daolicontroller
 	daolicontroller
 
-### Agent Node Installation
+### 2.2. Agent Node Installation
 
 The installation of an agent node involves the following six steps:
 
-1. Configure Docker Startup Parameters
-2. Install Wwarm Agent
-3. Configure and Install OpenvSwitch
-4. Install OpenvSwitch plugin
-5. Install DaoliNet Agent
-6. Connect OpenFlow Controller
+* Configure Docker Startup Parameters
+* Install Wwarm Agent
+* Configure and Install OpenvSwitch
+* Install OpenvSwitch plugin
+* Install DaoliNet Agent
+* Connect OpenFlow Controller
 
 Each step above is detailed below:
 
-#### 1. Configure Docker Startup Parameters
+#### 2.2.1. Configure Docker Startup Parameters
 
 1. Modify docker daemon startup parameters, add swarm management and add etcd support, e.g., in CentOS7, modify ExecStart parameter in file /usr/lib/systemd/system/docker.service
 
@@ -142,12 +142,12 @@ Each step above is detailed below:
 		systemctl daemon-reload
 		systemctl restart docker.service
 
-#### 2. Install Swarm Agent
+#### 2.2.2. Install Swarm Agent
 
 	docker pull swarm
 	docker run -ti -d --restart=always --name swarm-agent swarm j --addr <SWARM-AGENT-IP>:2375 etcd://<ETCD-IP>:4001
 
-#### 3. Configure and Install OpenvSwitch
+#### 2.2.3. Configure and Install OpenvSwitch
 
 To install OpenvSwitch, execute the following command lines, for detailed installation guide, see [How to Install Open vSwitch on Linux, FreeBSD and NetBSD](https://github.com/openvswitch/ovs/blob/master/INSTALL.md)
 
@@ -169,14 +169,14 @@ To install OpenvSwitch, execute the following command lines, for detailed instal
 	cd daolinet/
 	./ovsconf
 
-#### 4. Install OpenvSwitch Plugin
+#### 2.2.4. Install OpenvSwitch Plugin
 
 	pip install gunicorn flask netaddr
 	git clone https://github.com/daolinet/ovsplugin.git
 	cd ovsplugin/
 	./start.sh
 
-#### 5. Install DaoliNet Agent Service
+#### 2.2.5. Install DaoliNet Agent Service
 
 	# Install daolinet
 	mkdir $HOME/daolinet
@@ -194,7 +194,7 @@ To install OpenvSwitch, execute the following command lines, for detailed instal
 	# Run agent service
 	daolinet agent --iface <DEVNAME:DEVIP> etcd://<ETCD-IP>:4001
 
-#### 6. Connect OpenFlow Controller
+#### 2.2.6. Connect OpenFlow Controller
 
 In agent node, complete the above steps, and finally configure ovs connect to daolicontroller controller:
 
@@ -205,4 +205,3 @@ In agent node, complete the above steps, and finally configure ovs connect to da
 	ovs-vsctl set-controller daolinet tcp:<CONTROLLER-IP1>:6633,tcp:<CONTROLLER-IP2>:6633
 
 #### We are done! Try DaoliNet now! (see [DaoliNet User Guide](UserGuide-en.md))
-
