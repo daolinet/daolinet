@@ -12,7 +12,7 @@ import (
 	"strings"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/daolicloud/daolinet/model"
+	"github.com/daolinet/daolinet/model"
 	"github.com/gorilla/mux"
 	"github.com/samalba/dockerclient"
 )

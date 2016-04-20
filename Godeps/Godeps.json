@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/daolicloud/daolinet",
+	"ImportPath": "github.com/daolinet/daolinet",
 	"GoVersion": "go1.5",
 	"Deps": [
 		{

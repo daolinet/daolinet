@@ -6,11 +6,11 @@ import (
         "time"
 
         log "github.com/Sirupsen/logrus"
-        "github.com/daolicloud/daolinet/discovery"
-        "github.com/daolicloud/daolinet/discovery/kv"
+        "github.com/daolinet/daolinet/discovery"
+        "github.com/daolinet/daolinet/discovery/kv"
         "github.com/samalba/dockerclient"
         "github.com/codegangsta/cli"
-        "github.com/daolicloud/daolinet/api"
+        "github.com/daolinet/daolinet/api"
 )
 
 func server(c *cli.Context) {

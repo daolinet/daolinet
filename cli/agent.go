@@ -8,9 +8,9 @@ import (
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
-	"github.com/daolicloud/daolinet/discovery"
-	"github.com/daolicloud/daolinet/model"
-	"github.com/daolicloud/daolinet/netutils"
+	"github.com/daolinet/daolinet/discovery"
+	"github.com/daolinet/daolinet/model"
+	"github.com/daolinet/daolinet/netutils"
 )
 
 const (

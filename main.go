@@ -1,7 +1,7 @@
 package main
 
 import (
-        "github.com/daolicloud/daolinet/cli"
+        "github.com/daolinet/daolinet/cli"
 )
 
 

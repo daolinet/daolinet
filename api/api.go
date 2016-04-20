@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	log "github.com/Sirupsen/logrus"
-	"github.com/daolicloud/daolinet/discovery/kv"
+	"github.com/daolinet/daolinet/discovery/kv"
 	"github.com/gorilla/context"
 	"github.com/gorilla/mux"
 	"github.com/mailgun/oxy/forward"
