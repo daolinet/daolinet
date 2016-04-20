@@ -32,7 +32,7 @@ Execute the following command lines, see [Go Getting Started](https://golang.org
 #### Git Environment
 Execute the following command line
 
-		yum install -y git epel-release
+		yum install -y gcc git epel-release
 
 #### Python Environment
 Execute the following command line
@@ -69,7 +69,7 @@ Each step above is detailed below.
 #### 2.1.1. Install Etcd
 
 	docker pull microbox/etcd
-	docker run -ti -d -p 4001:4001 -p 7001:7001 --restart=always --name discovery microbox/etcd -addr <SWARM-IP>:4001 -peer-addr <SWARM-IP>:7001
+	docker run -ti -d -p 4001:4001 -p 7001:7001 --restart=always --name discovery microbox/etcd -addr <SWARM-MANAGER-IP>:4001 -peer-addr <SWARM-MANAGER-IP>:7001
 
 #### 2.1.2. Install Swarm Manager
 

@@ -27,9 +27,10 @@ DEVIP=$(ip addr show $DEVNAME | awk '$1=="inet" {print $2}'| head -1)
 systemctl stop NetworkManager
 systemctl disable NetworkManager
 ovs-vsctl add-br daolinet
+ip link set daolinet up
 ovs-vsctl add-port daolinet $DEVNAME
 ip addr del $DEVIP dev $DEVNAME
-ip addr change $DEVIP dev $DEVNAME
+ip addr change $DEVIP dev daolinet
 ovs-vsctl set Bridge daolinet other_config:hwaddr="$DEVMAC"
 
 if [ -n "$GATEWAYIP" ]; then
