@@ -10,40 +10,45 @@ DaoliNet provides a set of CLI (Command Line Interface) commands to:
 
 #### 1. Docker Network Plugin with DaoliNet Driver
 
-DaoliNet makes use of docker to create and manage container subnets by plugging DaoliNet driver in docker network.
+DaoliNet makes use of docker network to create and manage container subnets by plugging DaoliNet driver.
 
 1.1. Create a Network
 
-The following two docker CLIs exemplify creating two docker networks in CIDR subnets. The parameter --driver=daolinet specifies that these subnets will have DaoliNet networking properties.
+Use 'docker network' CLI to create container networks. The following two docker CLIs exemplify creating two docker networks in CIDR subnets. The parameter --driver=daolinet specifies that these subnets will have DaoliNet networking properties.
 
     docker -H :3380 network create --subnet=10.1.0.0/24 --gateway=10.1.0.1 --driver=daolinet dnet1
     docker -H :3380 network create --subnet=192.168.0.0/24 --gateway=192.168.0.1 --driver=daolinet dnet2
 
 The above CLI commands are executed on a Docker Swarm Manager node which is also a DaoliNet API Service Manager (see Section 2.1.4 of DaoliNet Installation Guide, "DaoliNet API Service", we always install DaoliNet API Service Manager on a Docker Swarm Manager node). If a CLI command is executed on a non-Swarm Manage node, then you must specify the IP address of the Docker Swarm Manager node in -H parameter. For example:
 
-	docker -H IP:3380 network create --subnet=10.1.0.0/24 --gateway=10.1.0.1 --driver=daolinet dnet1
+	docker -H <SWARN-MANAGER-IP>:3380 network create --subnet=10.1.0.0/24 --gateway=10.1.0.1 --driver=daolinet dnet1
 
 1.2. Launch a Container
 
-Use 'docker run' command to launch a container in an CIDR subnet; the subnet has been created using the method （see Section 1.1.); you should spcidfy the name of the subnet using --net parameter:
+Use 'docker run' CLI to launch a container in an CIDR subnet; the subnet has been created using the 'docker network' CLI （see Section 1.1.); you should spcidfy the name of the subnet using --net parameter:
 
     # Launch containers in 10.1.0.0/24 subnet
-    docker -H :3380 run -ti -d --net=dnet1 --name test1 centos # 10.1.0.2
-    docker -H :3380 run -ti -d --net=dnet1 --name test2 centos # 10.1.0.3
+    docker -H :3380 run -ti -d --net=dnet1 --name test1 centos
+    # Suppose that container test1 has IP address 10.1.0.2 (You may view the actual IP address using 'docker inspect test1') 
+    docker -H :3380 run -ti -d --net=dnet1 --name test2 centos
+    # Suppose that container test2 has IP address 10.1.0.3 (You may view the actual IP using 'docker inspect test2') 
 
     # Launch containers in 192.168.0.0/24 subnet
-    docker -H :3380 run -ti -d --net=dnet2 --name test3 centos # 192.168.0.2
-    docker -H :3380 run -ti -d --net=dnet2 --name test4 centos # 192.168.0.3
+    docker -H :3380 run -ti -d --net=dnet2 --name test3 centos
+    # Suppose test3 has IP 192.168.0.2
+    docker -H :3380 run -ti -d --net=dnet2 --name test4 centos
+    # Suppose test4 has IP 192.168.0.3
 
 1.3. Test Container Network
 
-The default networking rule in DaoliNet: ***The workloads in the same subnet are connected, and those in different subnets are not connected***
+The default networking rule of DaoliNet: ***The workloads in the same subnet are connected, and those in different subnets are not connected***
 
     # Enter container test1
     docker -H :3380 attach test1
 
     # In test1, ping test2, connected
     >> ping 10.1.0.3
+    
     # In test1, ping test3 or test4, not connected
     >> ping 192.168.0.2
     >> ping 192.168.0.3
