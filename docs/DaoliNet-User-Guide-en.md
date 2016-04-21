@@ -103,7 +103,7 @@ If a container has launched a service, you can map port to make the service usab
     daolictl firewall show testssh
     ssh <GATEWAY IP> -p 20022
 
-    ＃ Create a apache firewall rule named fw-web to container testweb, map the apache port 80 in the container to the server port 20080
+    # Create a apache firewall rule named fw-web to container testweb, map the apache port 80 in the container to the server port 20080
     daolictl firewall create --container testweb --rule 20080:80 fw-web
     # Now access the apache service of the container, <GATEWAY IP> is the ip address of the hosting server
     daolictl firewall show testweb
