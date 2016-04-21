@@ -55,17 +55,20 @@ The default networking rule of DaoliNet: ***The workloads in the same subnet are
 
 #### 2. DaoliNet Network Control and Management
 
-As we have seen in Section 1, containers in different subnets are not connected. DaoliNet can connect different subnets if they are placed in a network group.
+As we have seen in Section 1, containers in different subnets are not connected. DaoliNet can connect different subnets by lacing them in a network group.
 
 2.1. Create a Network Group
 
     # Create a network group
     daolictl group create G1
+    # G1 is the name of a newly created network group
 
-    # Add subnets into a network group
+    # Add a subnet into a network group
     daolictl member add --group G1 dnet1
     daolictl member add --group G1 dnet2
+    # You can view members in a network group
     daolictl group show G1
+    
     # Now in container test1, ping container test3 and test4, connected
     >> ping 192.168.0.2
     >> ping 192.168.0.3
@@ -80,9 +83,9 @@ As we have seen in Section 1, containers in different subnets are not connected.
 
 DaoliNet can control connection between any two containers
 
-    # Discunnect two containers
+    # Disconnect two containers
     daolictl disconnect test1:test2
-    # Now in container test1, ping container test2，not connected
+    # Now in container test1, ping container test2 (suppose its IP is 10.1.0.3)，not connected
     >> ping 10.1.0.3
 
     # Resume connection
@@ -92,7 +95,7 @@ DaoliNet can control connection between any two containers
 
 2.3. Set Firewall Policy
 
-If a container has launched a service, you can map port to make the service usable externally
+If a container has launched a service, you can map the service port number to make the service usable externally
 
 > **Note, please login an agent node to add the service image**
 >
@@ -101,6 +104,10 @@ If a container has launched a service, you can map port to make the service usab
 >       ssh agent-node
 >       docker pull daolicloud/centos6.6-ssh
 >       docker pull daolicloud/centos6.6-apache
+
+    # First, launch containers to test firewall rules
+    docker -H :3380 run -ti -d --net=dnet1 --name testssh daolicloud/centos6.6-ssh
+    docker -H :3380 run -ti -d --net=dnet1 --name testweb daolicloud/centos6.6-apache
 
     # Create an ssh firewall rule named fw-ssh for container testssh, map the ssh port 22 in the container to the server port 20022
     daolictl firewall create --container testssh --rule 20022:22 fw-ssh
