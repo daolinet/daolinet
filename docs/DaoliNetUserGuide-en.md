@@ -1,7 +1,7 @@
 DaoliNet User Guide
 =========
 
-Suppose you have installed DaoliNet by following [DaoliNet Installation Guide](DaoliNet-Install-Guide-en.md). Also make sure that all services have been started-up properly.
+Suppose you have installed DaoliNet by following [DaoliNet Installation Guide](DaoliNetInstallGuide-en.md). Also make sure that all services have been started-up properly.
 
 DaoliNet provides a set of CLI (Command Line Interface) commands to:
 * Group connect/disconnect CIDR (Classless Inter-Domain Routing) subnets which have been created by Docker which is plugged in with DaoliNet driver. Containers in a group of CIDR subnets are connected even though they can be distributed on any Docker hosts.
