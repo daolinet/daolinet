@@ -100,7 +100,7 @@ Each step above is detailed below.
 
 #### 2.1.5. Install Daolictl Command Line Tool
 
-> ***Note:*** Sometimes, you may need to repeat all command lines in Step 3 before carry on this step
+> ***Note:*** Sometimes, you may need to repeat all command lines in Step 2.1.4 before carry on this step
 
 	cd $HOME/daolinet/src/github.com/daolinet
 	git clone https://github.com/daolinet/daolictl.git
@@ -116,14 +116,14 @@ Each step above is detailed below.
 	git clone https://github.com/daolinet/daolicontroller.git
 	cd daolicontroller; python ./setup.py install
 	# Run daolicontroller
-	daolicontroller
+	systemctl start daolicontroller.service
 
 ### 2.2. Agent Node Installation
 
 The installation of an agent node involves the following six steps:
 
 * Configure Docker Startup Parameters
-* Install Wwarm Agent
+* Install Swarm Agent
 * Configure and Install OpenvSwitch
 * Install OpenvSwitch plugin
 * Install DaoliNet Agent
