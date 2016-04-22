@@ -3,7 +3,7 @@ package api
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
+	//"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -15,6 +15,11 @@ import (
 	"github.com/daolinet/daolinet/model"
 	"github.com/gorilla/mux"
 	"github.com/samalba/dockerclient"
+)
+
+const (
+	CONNECTED    = "ACCEPT"
+	DISCONNECTED = "DROP"
 )
 
 const (
@@ -283,7 +288,7 @@ func (a *Api) deleteMember(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *Api) parsePolicy(parts []string) (*dockerclient.ContainerInfo, *dockerclient.ContainerInfo, error) {
-	if len(parts) != 2 {
+	if len(parts) != 2 || parts[0] == "" || parts[1] == "" {
 		return nil, nil, ErrPolicyFormat
 	}
 
@@ -336,23 +341,6 @@ func (a *Api) policys(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *Api) policy(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	w.Header().Set("content-type", "application/json")
-
-	ok, err := a.store.Exists(path.Join(pathPolicy, vars["peer"]))
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	if !ok {
-		http.Error(w, ErrPolicyDoesNotExist.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusNoContent)
-}
-
-func (a *Api) savePolicy(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(mux.Vars(r)["peer"], ":")
 	pInfo, qInfo, err := a.parsePolicy(parts)
 	if err != nil {
@@ -360,9 +348,44 @@ func (a *Api) savePolicy(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	key := fmt.Sprintf("%s:%s", pInfo.Id, qInfo.Id)
-	if err := a.store.Put(path.Join(pathPolicy, key), []byte(key), nil); err != nil {
-		log.Errorf("error saving policy: %s", err)
+	var val []byte
+	pair, err := a.store.Get(path.Join(pathPolicy, pInfo.Id, qInfo.Id))
+	if err != nil {
+		val = []byte("")
+	} else {
+		val = pair.Value
+		if string(val) != CONNECTED && string(val) != DISCONNECTED {
+			val = []byte("")
+		}
+	}
+
+	w.Write(val)
+}
+
+func (a *Api) savePolicy(w http.ResponseWriter, r *http.Request) {
+	data := map[string]string{}
+	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	action := data["action"]
+	if action != CONNECTED && action != DISCONNECTED {
+		http.Error(w, "error to find action method", http.StatusInternalServerError)
+		return
+	}
+
+	parts := strings.Split(mux.Vars(r)["peer"], ":")
+	pInfo, qInfo, err := a.parsePolicy(parts)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	//key := fmt.Sprintf("%s:%s", pInfo.Id, qInfo.Id)
+	//if err := a.store.Put(path.Join(pathPolicy, key), []byte(key), nil); err != nil {
+	if err := a.store.Put(path.Join(pathPolicy, pInfo.Id, qInfo.Id), []byte(action), nil); err != nil {
+		//log.Errorf("error saving policy: %s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -377,9 +400,10 @@ func (a *Api) deletePolicy(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	key := fmt.Sprintf("%s:%s", pInfo.Id, qInfo.Id)
-	if err := a.store.DeleteTree(path.Join(pathPolicy, key)); err != nil {
-		log.Errorf("error deleting policy: %s", err)
+	//key := fmt.Sprintf("%s:%s", pInfo.Id, qInfo.Id)
+	//if err := a.store.DeleteTree(path.Join(pathPolicy, key)); err != nil {
+	if err := a.store.Delete(path.Join(pathPolicy, pInfo.Id, qInfo.Id)); err != nil {
+		//log.Errorf("error deleting policy: %s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
