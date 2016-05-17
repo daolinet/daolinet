@@ -5,17 +5,15 @@ DaoliNet is a Software Defined Networking (SDN) system that is designed to provi
 
 Top-Level Features
 ------------------
-* Resource efficiency: Connection of containers does not consume server resource when the containers are not in active communication. You get more out of your server resource. This is unlike routing learning based connection for which servers keep spending resource on learning routing even when involved containers are idling not in communication.
+* Resource efficiency: Connection of containers does not consume server resource when the containers are not in active communication, but can instantly switch to providing full connection capacity. This is in the same fashion of containers utilizing host CPUs. You get more out of your server resource.
 
 * Distribution anywhere: Docker servers can be laptops or PCs inside the firewalls of your office or home, servers in your own datacenter, or virtual machines in public clouds such as AWS. Trans-datacenter traffic is always encrypted.
 
 * Network virtualization: You can choose any CIDR IP addresses for your containers, and a container can keep IP address unchanged after moving physical locations.
 
-* Multi-tenancy isolation: Networks of different tenants are completely isolated from one another.
-
 * Pure software implementation using Open-V-Switch (OVS): Providing network functions as distributed switches, routers, gateways and firewalls. System deployment in a plug-n-play simplicity.
 
-**More in our website**:  http://www.daolicloud.com
+**To learn more about DaoliNet**:  http://www.daolinet.org
 
 Docker in Need of Efficient and Dynamic Networking
 =================
