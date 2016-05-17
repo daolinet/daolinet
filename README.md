@@ -18,7 +18,7 @@ Top-Level Features
 Docker in Need of Efficient and Dynamic Networking
 =================
 
-Containers can be highly ephemeral in lifecycle when providing efficient micro-services. Therefore a large number of dynamic containers in a Docker cloud are in need of quick establishment of connections as well as frequent change of connection status. Traditional data plane route learning based networking technologies are not very suitable to Docker cloud networking since Docker servers' frequent learning and updating routes translate to a low efficient use of server resource. To date, networking is a core feature of Docker that is relatively immature and still under heavy development.
+Containers can be highly ephemeral in lifecycle when providing efficient micro-services: a large number of dynamic containers in a Docker cloud need quick establishing connections as well as frequent changing connection status. Traditional data plane route learning technologies require Docker servers to frequently learn and update routing information for a large number of dynamic containers, which translated to a low efficient use of server resource. To date, networking is a core feature of Docker that is relatively immature and still under heavy development.
 
 DaoliNet for Efficient and Dynamic Docker Networking
 ==========================================
