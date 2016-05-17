@@ -29,7 +29,7 @@ The networking architecture of DaoliNet is based on the OpenFlow standard. It us
 
 In a DaoliNet network, all Docker servers are in an Ethernet which is either physically or VPN connected. Each Docker server acts as a virtual router for all of the container workloads that are hosted on that server. However, these virtual routers work in OpenFlow technology and they do not run any routing algorithms. Upon a container initiating a connection, the involved virtual routers will be real-time configured by the OpenFlow Controller to establish a route.
 
-![](http://www.daolicloud.com/html/technology.html)
+![](http://www.daolicloud.com/topology/topology.png)
 
 How it Works
 ------------
