@@ -29,17 +29,17 @@ The networking architecture of DaoliNet is based on the OpenFlow standard. It us
 
 In a DaoliNet network, all Docker servers are in an Ethernet which is either physically or VPN connected. Each Docker server acts as a virtual router for all of the container workloads that are hosted on that server. However, these virtual routers work in OpenFlow technology and they do not run any routing algorithms. Upon a container initiating a connection, the involved virtual routers will be real-time configured by the OpenFlow Controller to establish a route.
 
-![](http://www.daolicloud.com/topology/topology.png)
+![DaoliNet Architecture](http://www.daolicloud.com/topology/topology.png)
 
 How it Works
 ------------
-When a container initiates a connection, the OVS in the hosting Docker server as the source router will issue a PacketIn request to the OpenFlow Controller. The PacketIn request is just the first packet from the initiating container. The OpenFlow Controller, knowing all Docker servers as OpenFlow routers in the system and seeing PacketIN, can identify another Docker server which hosts the container as the destination workload. This second Docker server is the destination router for the connection. The OpenFlow Controller will respond with a pair of PacketOut flows, one for the source server, and the other for the destination server. These PacketOut flows establish a hot-plug route between the two containers.
+When a container initiates a connection, the OVS in the hosting Docker server as the source router will issue a PacketIn request to the OpenFlow Controller. The PacketIn request is just the first packet from the initiating container. The OpenFlow Controller, knowing all Docker servers as OpenFlow routers in the system and seeing PacketIN, can identify another Docker server which hosts the container as the destination workload. This second Docker server is the destination router for the connection. The OpenFlow Controller will respond with a pair of PacketOut flows, one for the source server, and the other for the destination server. These PacketOut flows establish a hot-plug route between the two containers, see Figure "Hot-Plug Route Establishment".
 
-![](http://www.daolicloud.com/topology/topology2.png)
+![Hot-Plug Route Establishment](http://www.daolicloud.com/topology/topology2.png)
 
-The hot-plug route consisting of three IP hops in general: (1) src-container-src-server hop, (2) src-server-dst-server hop, and (3) dst-server-dst-container hop. In case of the two containers being hosted in the same Docker server, the PacketOut flow route consists of one hop only: src-container-dst-container hop.
+The hot-plug route consisting of three IP hops in general: (1) src-container-src-server hop, (2) src-server-dst-server hop, and (3) dst-server-dst-container hop. In case of the two containers being hosted in the same Docker server, the PacketOut flow route consists of one hop only: src-container-dst-container hop, see Figure "IP Hops of Hot-Plug Route".
 
-![](http://www.daolicloud.com/topology/topology3.png)
+![IP Hops of Hot-Plug Route](http://www.daolicloud.com/topology/topology3.png)
 
 When a connection becomes idle and upon a time threshold, the hot-plug route flows will be time-out and deleted to release servers resource. Since hot-plug route establishment is fast, deleted inactive connection can be re-hot-plug upon reconnection. Therefore Docker servers as routers in DaoliNet work in a no-connection, no-resource-consumption style. This style of networking resource utilization matches exactly the fashion of container utilizing server CPU in that, an idle container consumes little server resource. DaoliNet is an efficient and dynamic networking technology for connecting Docker containers.
 
