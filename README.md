@@ -18,11 +18,7 @@ Top-Level Features
 Docker in Need of Efficient and Dynamic Networking
 =================
 
-Docker is awesome! It is a container engine to virtualize server CPUs much more efficient than a hypervisor does for virtual machines (VMs). A Docker server can partition an X86 server into thousands of containers. Containers are playing more and more roles in cloud computing in place of VMs. However, because each Docker server is created independently from one another, containers which are distributed in different Docker servers are by default not connected one another. We need a network solution to connect Docker containers.
-
-We know that containers are highly efficient in resource utilization, and ephemeral in lifecycle due to their suitability for micro-services provisioning. These properties translate to a large number of dynamic containers in a Docker cloud. A networking solution for Docker, if not very carefully designed, would tarnish the efficiency of Docker cloud. Unfortunately, some well-known networking techniques such as MAC-in-UDP encapsulation, or Docker servers running routing algorithms, do fall into such pitfalls. MAC-in-UDP encapsulation flattens a container network and causes Docker servers to store and process a large number of MAC addresses of containers. Docker servers running routing algorithms mean that they have to frequently discover and update dynamic route tables. Either is very inefficient in server resource utilization.
-
-To date, networking is a core feature of Docker that is relatively immature and still under heavy development.
+Containers can be highly ephemeral in lifecycle when providing efficient micro-services. This property translates to a large number of dynamic containers in a Docker cloud in need of quick establishment of connections as well as frequent change of connection status. Traditional route learning based networking technologies are not very efficient in server resource utilization when learning and updating dynamic new routes. To date, networking is a core feature of Docker that is relatively immature and still under heavy development.
 
 DaoliNet for Efficient and Dynamic Docker Networking
 ==========================================
