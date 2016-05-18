@@ -1,6 +1,7 @@
 package api
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	//"fmt"
@@ -382,6 +383,30 @@ func (a *Api) savePolicy(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+    if action == DISCONNECTED {
+        data := map[string]string{
+            "sid": pInfo.Id,
+            "did": qInfo.Id,
+        }
+
+        value, err := json.Marshal(data)
+        if err != nil {
+	    	log.Fatalf("json marshal error: %v", err)
+	    	http.Error(w, err.Error(), http.StatusInternalServerError)
+	    	return
+        }
+        body := bytes.NewBuffer(value)
+	    client := newClientAndScheme(a.client.TLSConfig)
+
+	    resp, err := client.Post(a.ofcUrl + "/v1/policy", "application/json", body)
+	    if err != nil {
+	    	http.Error(w, err.Error(), http.StatusInternalServerError)
+	    	return
+	    }
+        resp.Body.Close()
+
+    }
+
 	//key := fmt.Sprintf("%s:%s", pInfo.Id, qInfo.Id)
 	//if err := a.store.Put(path.Join(pathPolicy, key), []byte(key), nil); err != nil {
 	if err := a.store.Put(path.Join(pathPolicy, pInfo.Id, qInfo.Id), []byte(action), nil); err != nil {
@@ -407,6 +432,7 @@ func (a *Api) deletePolicy(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	w.WriteHeader(http.StatusNoContent)
 }
 

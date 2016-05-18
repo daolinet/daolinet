@@ -66,6 +66,11 @@ func Run() {
 					Usage:  "docker swarm addr",
 					EnvVar: "DOCKER_HOST",
 				},
+                cli.StringFlag{
+                    Name: "ofc",
+                    Value: "http://127.0.0.1:8080",
+                    Usage: "openflow controller",
+                },
 				cli.BoolFlag{
 					Name:  "allow-insecure",
 					Usage: "enable insecure tls communication",

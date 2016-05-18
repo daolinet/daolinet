@@ -18,6 +18,11 @@ func server(c *cli.Context) {
     swarmUrl := c.String("swarm")
     allowInsecure := c.Bool("allow-insecure")
 
+    ofcUrl := c.String("ofc")
+    if ofcUrl == "" {
+        log.Fatalf("The openflow controller url '%s' is invalid.", ofcUrl)
+    }
+
     uri := getDiscovery(c)
     if uri == "" {
         log.Fatalf("discovery required to manage a cluster. See '%s server --help'.", c.App.Name)
@@ -39,6 +44,7 @@ func server(c *cli.Context) {
 
     apiConfig := api.ApiConfig{
         ListenAddr: listenAddr,
+        OfcUrl: ofcUrl, 
         Client: client,
         Store: kvDiscovery,
         AllowInsecure: allowInsecure,

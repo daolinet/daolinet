@@ -19,11 +19,13 @@ type (
 		store         *kv.Discovery
 		allowInsecure bool
 		dUrl          string
+        ofcUrl        string
 		fwd           *forward.Forwarder
 	}
 
 	ApiConfig struct {
 		ListenAddr    string
+        OfcUrl        string
 		Client        *dockerclient.DockerClient
 		Store         *kv.Discovery
 		AllowInsecure bool
@@ -33,6 +35,7 @@ type (
 func NewApi(config ApiConfig) (*Api, error) {
 	return &Api{
 		listenAddr:    config.ListenAddr,
+		ofcUrl:        config.OfcUrl,
 		client:        config.Client,
 		store:         config.Store,
 		allowInsecure: config.AllowInsecure,
