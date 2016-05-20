@@ -33,11 +33,11 @@ In a DaoliNet network, all Docker servers are in an Ethernet which is either phy
 
 How it Works
 ------------
-When a container initiates a connection, the OVS in the hosting Docker server as the source router will issue a PacketIn request to the OpenFlow Controller. The PacketIn request is just the first packet from the initiating container. The OpenFlow Controller, knowing all Docker servers as OpenFlow routers in the system and seeing PacketIn, can identify another Docker server which hosts the container as the destination workload. This second Docker server is the destination router for the connection. The OpenFlow Controller will respond with a pair of PacketOut flows, one for the source server, and the other for the destination server. These PacketOut flows establish a hot-plug route between the two containers, see Figure "Hot-Plug Route Establishment" below.
+When a container initiates a connection, the OVS in the hosting Docker server as the source router will issue a PacketIn request to the OpenFlow Controller. The PacketIn request is just the first packet from the initiating container. The OpenFlow Controller, knowing all Docker servers as OpenFlow routers in the system and seeing PacketIn, can identify another Docker server which hosts the container as the destination workload. This second Docker server is the destination router for the connection. The OpenFlow Controller will respond with a pair of PacketOut flows, one for the source server, and the other for the destination server. These PacketOut flows establish a hot-plug route between the two containers, see figure below.
 
 ![Hot-Plug Route Establishment](http://www.daolicloud.com/topology/topology2.png)
 
-The hot-plug route consists of three IP hops in general: (1) src-container-src-server hop, (2) src-server-dst-server hop, and (3) dst-server-dst-container hop. In case of the two containers being hosted in the same Docker server, the PacketOut flow route consists of one hop only: src-container-dst-container hop, see Figure "IP Hops of Hot-Plug Route" below.
+The hot-plug route consists of three IP hops in general: (1) src-container-src-server hop, (2) src-server-dst-server hop, and (3) dst-server-dst-container hop. In case of the two containers being hosted in the same Docker server, the PacketOut flow route consists of one hop only: src-container-dst-container hop, see figure below.
 
 ![IP Hops of Hot-Plug Route](http://www.daolicloud.com/topology/topology3.png)
 
