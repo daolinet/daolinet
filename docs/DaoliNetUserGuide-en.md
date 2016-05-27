@@ -30,9 +30,9 @@ Use 'docker run' CLI to launch a container in an CIDR subnet; the subnet has bee
 
     # Launch containers in 10.1.0.0/24 subnet
     docker -H :3380 run -ti -d --net=dnet1 --name test1 centos
-    # Suppose that container test1 has IP address 10.1.0.2 (You may view the actual IP address using 'docker inspect test1') 
+    # Suppose that container test1 has IP address 10.1.0.2 (You may view the actual IP address using 'docker inspect test1')
     docker -H :3380 run -ti -d --net=dnet1 --name test2 centos
-    # Suppose that container test2 has IP address 10.1.0.3 (You may view the actual IP using 'docker inspect test2') 
+    # Suppose that container test2 has IP address 10.1.0.3 (You may view the actual IP using 'docker inspect test2')
 
     # Launch containers in 192.168.0.0/24 subnet
     docker -H :3380 run -ti -d --net=dnet2 --name test3 centos
@@ -49,7 +49,7 @@ The default networking rule of DaoliNet: ***The workloads in the same subnet are
 
     # In test1, ping test2, connected
     >> ping 10.1.0.3
-    
+
     # In test1, ping test3 or test4, not connected
     >> ping 192.168.0.2
     >> ping 192.168.0.3
@@ -69,7 +69,7 @@ As we have seen in Section 1, containers in different subnets are not connected.
     daolictl member add --group G1 dnet2
     # You can view members in a network group
     daolictl group show G1
-    
+
     # Now in container test1, ping container test3 and test4, connected
     >> ping 192.168.0.2
     >> ping 192.168.0.3

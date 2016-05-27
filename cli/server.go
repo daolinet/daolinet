@@ -44,7 +44,7 @@ func server(c *cli.Context) {
 
     apiConfig := api.ApiConfig{
         ListenAddr: listenAddr,
-        OfcUrl: ofcUrl, 
+        OfcUrl: ofcUrl,
         Client: client,
         Store: kvDiscovery,
         AllowInsecure: allowInsecure,
