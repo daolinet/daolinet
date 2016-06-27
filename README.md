@@ -27,7 +27,7 @@ Architecture
 ------------
 The networking architecture of DaoliNet is based on the OpenFlow standard. It uses an OpenFlow Controller as an intelligent control plane, and Open-V-Switches (OVSes) to implement the datapath. The OpenFlow Controller in DaoliNet is a logically centralized entity but physically a set of HA distributed web-service-like agents. OVSes are ubiquitously available in Linux kernels and hence in all Docker servers.
 
-In a DaoliNet network, all Docker servers are in an Ethernet which is either physically or VPN connected. Each Docker server acts as a virtual router for all of the container workloads that are hosted on that server. However, these virtual routers work in OpenFlow technology and they do not run any routing algorithms. Upon a container initiating a connection, the involved virtual routers will be real-time configured by the OpenFlow Controller to establish a route.
+In a DaoliNet network, all Docker servers are either in an Ethernet which is physically connected, or in a large L2 which is distributed over a scalable IP fabric (e.g., server MAC-in-UDP). Each Docker server acts as a virtual router for all of the container workloads that are hosted on that server. However, these virtual routers work in OpenFlow technology and they do not run any routing algorithms. Upon a container initiating a connection, the involved virtual routers will be real-time configured by the OpenFlow Controller to establish a route.
 
 ![DaoliNet Architecture](http://www.daolicloud.com/topology/topologynew.png)
 
@@ -37,7 +37,7 @@ When a container initiates a connection, the OVS in the hosting Docker server as
 
 ![Hot-Plug Route Establishment](http://www.daolicloud.com/topology/topology2.png)
 
-The hot-plug route consists of three IP hops in general: (1) src-container-src-server hop, (2) src-server-dst-server hop, and (3) dst-server-dst-container hop. In case of the two containers being hosted in the same Docker server, the PacketOut flow route consists of one hop only: src-container-dst-container hop, see figure below.
+The hot-plug route consisting of three IP hops in general: (1) src-container-src-server hop, where the containers' logical IPs are changed into their physical IPs , (2) src-server-dst-server hop, and (3) dst-server-dst-container hop, where the containers' physical IPs are changed back to their logical IPs. The logical IP of a container is visible to applications or other micro-service containers, and is fixed to the identity of the container, and will not change in the lifecycle of the container. When a container moves physical location, its logical IP will not change, its physical IP changes. The physical IP of a container is invisible to applications or other micro-service containers. In case of the two containers being hosted in the same Docker server, the PacketOut flow route consists of one hop only: src-container-dst-container hop. In case that the scale of the servers is large so that the servers have to be connected over an IP fabric for scalability, a large L2 solution needs to be deployed to connect the servers, e.g., VXLAN to encapsulate servers MAC-in-UDP, see figure below.
 
 ![IP Hops of Hot-Plug Route](http://www.daolicloud.com/topology/topology4.png)
 
