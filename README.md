@@ -39,7 +39,7 @@ When a container initiates a connection, the OVS in the hosting Docker server as
 
 The hot-plug route consists of three IP hops in general: (1) src-container-src-server hop, (2) src-server-dst-server hop, and (3) dst-server-dst-container hop. In case of the two containers being hosted in the same Docker server, the PacketOut flow route consists of one hop only: src-container-dst-container hop, see figure below.
 
-![IP Hops of Hot-Plug Route](http://www.daolicloud.com/topology/topology3.png)
+![IP Hops of Hot-Plug Route](http://www.daolicloud.com/topology/topology4.png)
 
 When a connection becomes idle and upon a time threshold, the hot-plug route will be time-out and deleted to release servers resource. Since hot-plug route establishment is fast, deleted inactive connection can be re-hot-plug upon reconnection. Therefore Docker servers as routers in DaoliNet work in a no-connection, no-resource-consumption style. This style of networking resource utilization matches exactly the fashion of container utilizing server CPU in that, an idle container consumes little server resource. DaoliNet is an efficient and dynamic networking technology for connecting Docker containers.
 
