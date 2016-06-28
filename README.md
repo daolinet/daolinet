@@ -5,11 +5,11 @@ DaoliNet is a Software Defined Networking (SDN) system to provide dynamic, effic
 
 Top-Level Features
 ------------------
-* Dynamic connection: Containers are hot-plug cconnected according to their PaaS business required relationship rather than their IP address definition, and the control of a connection is dynamic following the dynamic change of the PaaS business requirement.
+* Dynamic connection: Containers are hot-plug connected according to their PaaS business required relationship rather than their IP address definition, and the control of a connection is dynamic following the dynamic change of the PaaS business requirement.
 
 * Efficient connection: Connection of containers consumes little host resource when the containers are not in active communication, but can instantly switch to providing full connection capacity. This is in the same fashion of containers efficient utilization of host CPU resource. You get more out of your server resource.
 
-* Scalability: Container cloud can grow to very large scale in pyramid structure of L3 routers connecting L2 switches to keep the connection quick. This pyramid structured networking is in contrast to container-MAC-in-UDP encapsulation flattened L2 switches which have to hold a large number of container MAC addresses and slow down the connection.
+* Scalability: Container cloud can grow to very large scale in pyramid structure of L3 routers connecting L2 switches to keep the connection quick. This pyramid structured networking is in contrast to container-MAC-in-UDP encapsulation flattened L2 switches which have to hold a large number of container MAC addresses to slow down the connection.
 
 * Network virtualization: A container keeps IP address unchanged when moving physical locations. A multi-tenancy cloud allows tenants to freely choose IP addresses for their containers.
 
