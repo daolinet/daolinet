@@ -1,4 +1,4 @@
-DaoliNet for Efficient and Dynamic Docker Networking
+DaoliNet for Dynamic, Efficient, Scalable and Virtualized Docker Networking
 =================
 
 DaoliNet is a Software Defined Networking (SDN) system to provide dynamic, efficient, scalable and virtualized connection for Docker containers.
