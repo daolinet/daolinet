@@ -17,13 +17,12 @@ Top-Level Features
 
 **To learn more about DaoliNet**:  http://www.daolicloud.com
 
-Docker in Need of Efficient and Dynamic Networking
+Docker in Need of Dynamic, Scalable, Efficient and Virtualized Networking
 =================
+Containers can be highly ephemeral in lifecycle when providing efficient micro-services: a large number of containers in a Docker cloud need quick establishing connections, dynamic changing connection status, or real-time providing scale-out PaaS capabilities. Known container networking technologies include: (1) Container-IP route learning network which requires Docker servers to frequently learn and update routing information for a large number of containers; (2) Container-MAC overlay network by encapsulating container-MAC-in-UDP which requires virtual switches to cache large numbers of container MAC addresses. A major limitation of (1) is that an IP route learning network is physical and can hardly be virtualized. A major limitation of (2) is that a flatten container-MAC-in-UDP network limits the scalability of the container cloud, and also such a MAC network lacks a dynamic structure which a PaaS platform needs. To date, networking is a core feature of Docker that is relatively immature and still under heavy development.
 
-Containers can be highly ephemeral in lifecycle when providing efficient micro-services: a large number of dynamic containers in a Docker cloud need quick establishing connections as well as frequent changing connection status. Traditional data plane route learning technologies require Docker servers to frequently learn and update routing information for a large number of dynamic containers, which translate to low efficient use of server resource. To date, networking is a core feature of Docker that is relatively immature and still under heavy development.
-
-DaoliNet for Efficient and Dynamic Docker Networking
-==========================================
+DaoliNet
+========
 
 Architecture
 ------------
