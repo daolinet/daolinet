@@ -39,11 +39,17 @@ When a container initiates a connection, the OVS in the hosting Docker server as
 
 ![Hot-Plug Route Establishment](http://www.daolicloud.com/topology/topology2.png)
 
-The hot-plug route consisting of three IP hops in general: (1) src-container-src-server hop, where the containers' logical IPs are changed into their physical IPs , (2) src-server-dst-server hop, and (3) dst-server-dst-container hop, where the containers' physical IPs are changed back to their logical IPs. The logical IP of a container is visible to applications or other micro-service containers, and is fixed to the identity of the container, and will not change in the lifecycle of the container. When a container moves physical location, its logical IP will not change, its physical IP changes. The physical IP of a container is invisible to applications or other micro-service containers. In case of the two containers being hosted in the same Docker server, the PacketOut flow route consists of one hop only: src-container-dst-container hop. In case that the scale of the servers is large so that the servers have to be connected over an IP fabric for scalability, a large L2 solution needs to be deployed to connect the servers, e.g., VXLAN to encapsulate servers MAC-in-UDP, see figure below.
+Scalability
+-----------
+A hot-plug route consists of three IP hops in general: (1) src-container-src-server hop, where the containers' logical IPs are changed into their physical IPs , (2) src-server-dst-server hop, and (3) dst-server-dst-container hop, where the containers' physical IPs are changed back to their logical IPs. The scalability of the container cloud network is achieved by connecting the servers over an IP fabric, e.g., VXLAN encapsulation of the servers MAC-in-UDP, see figure below.
 
 ![IP Hops of Hot-Plug Route](http://www.daolicloud.com/topology/topology4.png)
 
-When a connection becomes idle and upon a time threshold, the hot-plug route will be time-out and deleted to release servers resource. Since hot-plug route establishment is fast, deleted inactive connection can be re-hot-plug upon reconnection. Therefore Docker servers as routers in DaoliNet work in a no-connection, no-resource-consumption style. This style of networking resource utilization matches exactly the fashion of container utilizing server CPU in that, an idle container consumes little server resource. DaoliNet is an efficient and dynamic networking technology for connecting Docker containers.
+In case of the two containers being hosted in the same Docker server, the PacketOut flow route consists of one hop only: src-container-dst-container hop.
+
+Network Virtualization
+----------------------
+The logical IP of a container is visible to applications or other micro-service containers, and is fixed to the identity of the container, and will not change in the lifecycle of the container. When a container moves physical location, its logical IP will not change, its physical IP changes. The physical IP of a container is invisible to applications or other micro-service containers. When a connection becomes idle and upon a time threshold, the hot-plug route flows will be time-out and deleted to release servers resource. Since hot-plug route establishment is fast, deleted inactive connection can be re-hot-plug upon reconnection. Therefore Docker servers as routers in DaoliNet work in a no-connection, no-resource-consumption style. This style of networking resource utilization matches exactly the fashion of container utilizing server CPU in that, an idle container consumes little server resource. DaoliNet is an efficient and dynamic networking technology for connecting Docker containers.
 
 Simple Networking for Containers
 --------------------------------
