@@ -15,7 +15,7 @@ Top-Level Features
 
 * Pure software implementation using Open-V-Switch (OVS): Providing network functions as distributed switches, routers, gateways and firewalls. System deployment in a plug-n-play simplicity.
 
-**To learn more about DaoliNet**:  http://www.daolinet.org
+**To learn more about DaoliNet**:  http://www.daolicloud.com
 
 Docker in Need of Efficient and Dynamic Networking
 =================
@@ -49,4 +49,4 @@ Simple Networking for Containers
 --------------------------------
 In DaoliNet, Docker servers in the system are in a simple state of not-knowing-one-another, completely independent from one another. This architecture not only conserves resource utilization, but more importantly the independent relationship among the Docker servers greatly simplifies the management of resource. Extending the resource pool is as simple as plug-n-play style of adding a server to the pool and notifying the OpenFlow Controller. No complex routing table discovery and update among the routers is needed. There is also no need for Docker servers to pairwise run some packet encapsulation protocol which is not only inefficient in resource utilization but will also nullify network diagnosing and troubleshooting tools such as traceroute.
 
-**More in our website:** http://www.daolinet.org/html/technology.html
+**More in our website:** http://www.daolicloud.com/html/technology.html
