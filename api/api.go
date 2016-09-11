@@ -19,13 +19,13 @@ type (
 		store         *kv.Discovery
 		allowInsecure bool
 		dUrl          string
-        ofcUrl        string
+		ofcUrl        string
 		fwd           *forward.Forwarder
 	}
 
 	ApiConfig struct {
 		ListenAddr    string
-        OfcUrl        string
+		OfcUrl        string
 		Client        *dockerclient.DockerClient
 		Store         *kv.Discovery
 		AllowInsecure bool
@@ -112,6 +112,9 @@ func (a *Api) Run() error {
 			"/api/policy/{peer}":          a.deletePolicy,
 			"/api/firewalls/{name}":       a.deleteFirewall,
 		},
+                "PUT": {
+			"/api/containers/{id}/reset":    a.resetContainer,
+                },
 	}
 
 	apiRouter := mux.NewRouter()
