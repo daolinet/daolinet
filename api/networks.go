@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	//"fmt"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -318,24 +318,26 @@ func (a *Api) parsePolicy(parts []string) (*dockerclient.ContainerInfo, *dockerc
 func (a *Api) policys(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "application/json")
 
-	policy, err := a.store.List(pathPolicy)
+	policies, err := a.store.List(pathPolicy)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	pArray := []string{}
-	for _, p := range policy {
-		parts := strings.Split(string(p.Value), ":")
-		pInfo, qInfo, err := a.parsePolicy(parts)
+        var data = map[string]string{}
+	for _, policy := range policies {
+                peer := strings.Split(policy.Key, "/")
+                parts := strings.Split(peer[len(peer)-1], ":")
+                pInfo, qInfo, err := a.parsePolicy(parts)
 		if err != nil {
-			continue
+                    log.Errorf(err.Error())
+                    continue
 		}
-		peer := strings.Join([]string{
-			strings.TrimLeft(pInfo.Name, "/"),
-			strings.TrimLeft(qInfo.Name, "/")}, ":")
-		pArray = append(pArray, peer)
+                key := strings.Join([]string{
+                        strings.TrimLeft(pInfo.Name, "/"),
+                        strings.TrimLeft(qInfo.Name, "/")}, ":")
+                data[key] = string(policy.Value)
 	}
-	if err := json.NewEncoder(w).Encode(pArray); err != nil {
+	if err := json.NewEncoder(w).Encode(data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -350,7 +352,9 @@ func (a *Api) policy(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var val []byte
-	pair, err := a.store.Get(path.Join(pathPolicy, pInfo.Id, qInfo.Id))
+        key := fmt.Sprintf("%s:%s", pInfo.Id, qInfo.Id)
+	// pair, err := a.store.Get(path.Join(pathPolicy, pInfo.Id, qInfo.Id))
+	pair, err := a.store.Get(path.Join(pathPolicy, key))
 	if err != nil {
 		val = []byte("")
 	} else {
@@ -407,9 +411,9 @@ func (a *Api) savePolicy(w http.ResponseWriter, r *http.Request) {
 
     }
 
-	//key := fmt.Sprintf("%s:%s", pInfo.Id, qInfo.Id)
-	//if err := a.store.Put(path.Join(pathPolicy, key), []byte(key), nil); err != nil {
-	if err := a.store.Put(path.Join(pathPolicy, pInfo.Id, qInfo.Id), []byte(action), nil); err != nil {
+	// if err := a.store.Put(path.Join(pathPolicy, pInfo.Id, qInfo.Id), []byte(action), nil); err != nil {
+	key := fmt.Sprintf("%s:%s", pInfo.Id, qInfo.Id)
+	if err := a.store.Put(path.Join(pathPolicy, key), []byte(action), nil); err != nil {
 		//log.Errorf("error saving policy: %s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -425,9 +429,9 @@ func (a *Api) deletePolicy(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//key := fmt.Sprintf("%s:%s", pInfo.Id, qInfo.Id)
-	//if err := a.store.DeleteTree(path.Join(pathPolicy, key)); err != nil {
-	if err := a.store.Delete(path.Join(pathPolicy, pInfo.Id, qInfo.Id)); err != nil {
+	// if err := a.store.Delete(path.Join(pathPolicy, pInfo.Id, qInfo.Id)); err != nil {
+	key := fmt.Sprintf("%s:%s", pInfo.Id, qInfo.Id)
+	if err := a.store.Delete(path.Join(pathPolicy, key)); err != nil {
 		//log.Errorf("error deleting policy: %s", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

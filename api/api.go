@@ -99,6 +99,7 @@ func (a *Api) Run() error {
 			"/api/firewalls":               a.firewalls,
 			"/api/firewalls/{name}":        a.firewallByContainer,
 			"/api/firewalls/{node}/{port}": a.firewall,
+			"/api/containers/{id}":         a.showContainer,
 		},
 		"POST": {
 			"/api/groups":        a.saveGroup,
