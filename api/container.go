@@ -3,6 +3,7 @@ package api
 import (
     "encoding/json"
     "fmt"
+    "io/ioutil"
     "net/http"
     "path"
     "strconv"
@@ -21,7 +22,15 @@ func (a *Api) resetContainer(w http.ResponseWriter, r *http.Request) {
 		return
     }
 
+    var data = map[string]string{}
+    if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    node, ok := data["node"]
     oldId := mux.Vars(r)["id"]
+
     info, err := a.client.InspectContainer(oldId)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -47,6 +56,15 @@ func (a *Api) resetContainer(w http.ResponseWriter, r *http.Request) {
     config.Env = info.Config.Env
     config.Cmd = info.Config.Cmd
     config.Image = info.Config.Image
+
+    // Add swarm filters, only constraint node filter.
+    if ok {
+        if config.Env == nil {
+            config.Env = []string{}
+        }
+        swarmNode := fmt.Sprintf("constraint:node==%s", node)
+        config.Env = append(config.Env, swarmNode)
+    }
 
     netMode := info.HostConfig.NetworkMode
     net := info.NetworkSettings.Networks[netMode]
@@ -100,6 +118,8 @@ func (a *Api) resetContainer(w http.ResponseWriter, r *http.Request) {
         }
     }()
 
+    go a.resetContainerById(info.Id, newId)
+
     err = a.client.StartContainer(newId, hostConfig)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -110,7 +130,7 @@ func (a *Api) resetContainer(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *Api) resetContainerById(oldId , newId string) {
-    // Firewall, Group, Policy
+    // Reset old container firewall to new.
     firewalls, err := a.store.List(pathNameFirewall)
     if err != nil {
         log.Errorf("error to get all firewalls: %v", err)
@@ -142,6 +162,7 @@ func (a *Api) resetContainerById(oldId , newId string) {
         }
     }
 
+    // Reset old container policy to new.
     policies, err := a.store.List(pathPolicy)
     if err != nil {
         log.Errorf("error to get all policies : %v", err)
@@ -175,5 +196,59 @@ func (a *Api) resetContainerById(oldId , newId string) {
                 }
             }
         }
+    }
+}
+
+func (a *Api) showContainer(w http.ResponseWriter, r *http.Request) {
+    container := mux.Vars(r)["id"]
+    info, err := a.client.InspectContainer(container)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    client := newClientAndScheme(a.client.TLSConfig)
+    url := fmt.Sprintf("%s/v1/containers/%s", a.ofcUrl, info.Id)
+    resp, err := client.Get(url)
+    if err != nil {
+        log.Warnf("Get container from openflow controller: %v", err)
+    }
+
+    ofResult := map[string]string{}
+    if resp != nil && resp.Body != nil {
+        body, err := ioutil.ReadAll(resp.Body)
+        if err != nil {
+            log.Warnf("read body: %v", err)
+        }
+        if resp.StatusCode >= 400 {
+            log.Warnf("Get container from openflow controller: %s", string(body))
+        } else {
+            if err := json.Unmarshal(body, &ofResult); err != nil {
+                log.Warnf("unmarshal body from openflow controller: %v", err)
+            }
+        }
+        resp.Body.Close()
+    }
+    closeIdleConnections(client)
+    data := []map[string]string{}
+    for key, value := range info.NetworkSettings.Networks {
+        newValue := map[string]string{}
+        newValue["Id"] = info.Id
+        newValue["NetworkName"] = key
+        ipAddress := fmt.Sprintf("%s/%d", value.IPAddress, value.IPPrefixLen)
+        newValue["IPAddress"] = ipAddress
+        newValue["MacAddress"] = value.MacAddress
+        newValue["Gateway"] = value.Gateway
+     
+        var vIP string = ""
+        if value.MacAddress == ofResult["MacAddress"] {
+            vIP = ofResult["UIPAddress"]
+        }
+        newValue["VIPAddress"] = vIP
+        data = append(data, newValue)
+    }
+    if err := json.NewEncoder(w).Encode(data); err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
     }
 }
