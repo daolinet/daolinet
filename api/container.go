@@ -100,12 +100,12 @@ func (a *Api) resetContainer(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    err = a.client.RemoveContainer(info.Id, true, false)
-    if err != nil {
-        log.Warnf("Remove container: %v", err)
-    }
-
     go func() {
+        err = a.client.RemoveContainer(info.Id, true, false)
+        if err != nil {
+            log.Warnf("Remove container: %v", err)
+        }
+
         client := newClientAndScheme(a.client.TLSConfig)
         url := fmt.Sprintf("%s/v1/containers/%s", a.ofcUrl, info.Id)
         resp, err := client.Post(url, "application/json", nil)
