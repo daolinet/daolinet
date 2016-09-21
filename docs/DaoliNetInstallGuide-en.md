@@ -18,7 +18,7 @@ DaoliNet provides network connection between containers which may run on a clust
 Each step in the preparation of the above software environment is detailed below.
 
 #### Docker Environment
-Execute the following command line, see [On Linux distributions](https://docs.docker.com/engine/installation/linux/) for details.
+Execute the following command line, see [Install Docker Engine on Linux](https://docs.docker.com/engine/installation/linux/) for details.
 
 		curl -fsSL https://get.docker.com/ | sh
 
