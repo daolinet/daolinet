@@ -125,4 +125,28 @@ If a container has launched a service, you can map the service port number to ma
     # Delete a named firewall rule
     daolictl firewall delete fw-ssh fw-web
 
+#### 3. DaoliNet Operation for Container(Migration)
+
+Docker Swarm can operate container for using local command, but not migration, daolinet implement it and show container network information.
+
+3.1. Migrate Container
+
+Daolinet implement migration function for container, it can rescheduler container to other docker host, and also keep container ip address and mac address.
+
+	daolictl container reset --node <NODE-ID> <CONTAINER>
+
+Example:
+
+	# by swarm scheduler.
+	daolictl container reset testweb
+	# rescheduler to other node by id and hostname
+	daolictl container reset --node othernode testweb
+
+3.2. Show Container Networks
+
+	daolictl container show <CONTAINER>
+
+Example:
+
+	daolictl container show testweb
 

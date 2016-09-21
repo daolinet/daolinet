@@ -92,7 +92,7 @@ Each step above is detailed below.
 	cd src/github.com/daolinet
 	git clone https://github.com/daolinet/daolinet.git
 	cd daolinet
-	godep go build
+	godep go build -ldflags "-s -w"
 	mv daolinet ../../../../bin/
 
 	# Run api server
@@ -105,7 +105,7 @@ Each step above is detailed below.
 	cd $HOME/daolinet/src/github.com/daolinet
 	git clone https://github.com/daolinet/daolictl.git
 	cd daolictl
-	godep go build
+	godep go build -ldflags "-s -w"
 	mv daolictl ../../../../bin/
 
 #### 2.1.6. Install Openflow Controller
@@ -135,12 +135,16 @@ Each step above is detailed below:
 
 1. Modify docker daemon startup parameters, add swarm management and add etcd support, e.g., in CentOS7, modify ExecStart parameter in file /usr/lib/systemd/system/docker.service
 
-		ExecStart=/usr/bin/docker daemon -H fd:// -H tcp://0.0.0.0:2375 --cluster-store=etcd://<ETCD-IP>:4001
+	ExecStart=/usr/bin/dockerd -H unix:///var/run/docker.sock -H tcp://0.0.0.0:2375 --cluster-store=etcd://<ETCD-IP>:4001
+
+For older version:
+
+	ExecStart=/usr/bin/docker daemon -H fd:// -H tcp://0.0.0.0:2375 --cluster-store=etcd://<ETCD-IP>:4001
 
 2. Restart services:
 
-		systemctl daemon-reload
-		systemctl restart docker.service
+	systemctl daemon-reload
+	systemctl restart docker.service
 
 #### 2.2.2. Install Swarm Agent
 
@@ -165,9 +169,10 @@ To install OpenvSwitch, execute the following command lines, for detailed instal
 
 
 	# Run OpenvSwitch script
-	git clone https://github.com/daolinet/daolinet.git
-	cd daolinet/
-	./ovsconf
+	curl -sSL https://github.com/daolinet/toolset/raw/master/scripts/ovsconf | bash -s
+	# Choose one if the node has multiple network cards
+        curl -sSL https://github.com/daolinet/toolset/raw/master/scripts/ovsconf | bash -s -- <DEVN
+AME>
 
 #### 2.2.4. Install OpenvSwitch Plugin
 
@@ -188,7 +193,7 @@ To install OpenvSwitch, execute the following command lines, for detailed instal
 	cd src/github.com/daolinet
 	git clone https://github.com/daolinet/daolinet.git
 	cd daolinet
-	godep go build
+	godep go build -ldflags "-s -w"
 	mv daolinet ../../../../bin/
 
 	# Run agent service
