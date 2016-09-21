@@ -2,6 +2,12 @@
 
 : ${DEVNAME:=$1}
 
+systemctl status openvswitch > /dev/null
+if [ "$?" -ne 0 ]; then
+    echo "Make sure openvswitch is available."
+    exit -1
+fi
+
 if [ -z "$DEVNAME" ]; then
     DEVNAME=$(ip route | awk '$1=="default" {print $5}' | head -1)
     if [ -z "$DEVNAME" ]; then
