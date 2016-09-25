@@ -95,9 +95,17 @@ func (a *Api) resetContainer(w http.ResponseWriter, r *http.Request) {
     }
     newId, err := a.client.CreateContainer(config, info.Name, nil)
     if err != nil {
-        a.client.StartContainer(info.Id, hostConfig)
-        http.Error(w, err.Error(), http.StatusInternalServerError)
-        return
+        err = a.client.RenameContainer(info.Id, info.Name)
+        if err != nil {
+            http.Error(w, err.Error(), http.StatusInternalServerError)
+            return
+        }
+
+        err = a.client.StartContainer(info.Id, hostConfig)
+        if err != nil {
+           http.Error(w, err.Error(), http.StatusInternalServerError)
+            return
+        }
     }
 
     go func() {
