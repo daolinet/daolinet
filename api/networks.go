@@ -448,6 +448,7 @@ func (a *Api) saveFirewall(w http.ResponseWriter, r *http.Request) {
 	}
 	name := firewall.Name
 	container := firewall.Container
+	gatewayIP := firewall.GatewayIP
 
 	if name == "" || container == "" {
 		http.Error(w, "name or container cannot be empty.", http.StatusInternalServerError)
@@ -494,7 +495,10 @@ func (a *Api) saveFirewall(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	gateway, err := a.choiceGateway(info.Node.IP)
+        if gatewayIP == "" {
+            gatewayIP = info.Node.IP
+        }
+	gateway, err := a.choiceGateway(gatewayIP)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
