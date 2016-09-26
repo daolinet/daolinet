@@ -53,6 +53,7 @@ func (a *Api) resetContainer(w http.ResponseWriter, r *http.Request) {
 
     config := &dockerclient.ContainerConfig{}
     config.Tty = info.Config.Tty
+    config.OpenStdin = info.Config.OpenStdin
     config.Env = info.Config.Env
     config.Cmd = info.Config.Cmd
     config.Image = info.Config.Image
