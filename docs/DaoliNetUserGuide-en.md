@@ -134,20 +134,20 @@ Docker Swarm can operate container for using local command, but not migration, d
 
 Daolinet implement migration function for container, it can rescheduler container to other docker host, and also keep container ip address and mac address.
 
-	daolictl container reset --node <NODE-ID> <CONTAINER>
+	daolictl container move --node <NODE-ID> <CONTAINER>
 
 Example:
 
 	# by swarm scheduler.
-	daolictl container reset testweb
+	daolictl container move testweb
 	# rescheduler to other node by id and hostname
-	daolictl container reset --node othernode testweb
+	daolictl container move --node othernode testweb
 
 3.2. Show Container Networks
 
-	daolictl container show <CONTAINER>
+	daolictl container shownet <CONTAINER>
 
 Example:
 
-	daolictl container show testweb
+	daolictl container shownet testweb
 
