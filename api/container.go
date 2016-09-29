@@ -251,7 +251,7 @@ func (a *Api) showContainer(w http.ResponseWriter, r *http.Request) {
      
         var vIP string = ""
         if value.MacAddress == ofResult["MacAddress"] {
-            vIP = ofResult["UIPAddress"]
+            vIP = ofResult["VIPAddress"]
         }
         newValue["VIPAddress"] = vIP
         data = append(data, newValue)
